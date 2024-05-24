@@ -27,14 +27,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-
-      # - name: Build Failed
-      #   uses: rjstone/discord-webhook-notify@v1
-      #   if: failure()
-      #   with:
-      #     text: Build failed
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      #     severity: error
+      - name: Build Failed
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          text: Build failed
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: error
 
       - name: Deploy
         if: ${{ github.event_name == 'push' && contains(join(toJson(github.event.commits.*.message)), '#skip') == false }}
@@ -42,13 +41,13 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      # - name: Success
-      #   uses: rjstone/discord-webhook-notify@v1
-      #   if: ${{ github.event_name == 'push' && success() }}
-      #   with:
-      #     severity: info
-      #     text: New version of Pokedex is deployed
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ github.event_name == 'push' && success() }}
+        with:
+          severity: info
+          text: New version of Pokedex is deployed
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   # tag_release:
   #   needs: [deployment_pipeline]
